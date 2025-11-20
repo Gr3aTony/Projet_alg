@@ -11,3 +11,4 @@ def dbg_builder(fasta_file,color, k,dbg):
                     else:
                         dbg[kmer].append(color)
     return dbg
+
