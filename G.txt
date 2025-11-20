@@ -1,0 +1,2 @@
+/Users/2ndlife/Documents/Rennes M2/ALG/Projet_alg/test.txt
+/Users/2ndlife/Documents/Rennes M2/ALG/Projet_alg/test1.txt
