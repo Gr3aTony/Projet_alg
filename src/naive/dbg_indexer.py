@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# 
 import build
 import query
 import argparse
@@ -7,8 +9,9 @@ import pickle
 #parse et recup les info necessaire
 def build_index(args):
     k = args.k
-    file_list = args.i
+    file_list = args.i[0]
     out_name = args.o
+    print(file_list)
     colored_graph = build.loop(file_list,k)
     pickle.dump(colored_graph,open(f"{out_name}.dumped","wb"))
 
@@ -19,10 +22,10 @@ def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest='cmd')
     b = sub.add_parser('build')
-    b.add_argument('--k', type=int, required=True)
-    b.add_argument('--fasta', nargs='+', required=True,
+    b.add_argument('-k', type=int, required=True)
+    b.add_argument('-i', nargs='+', required=True,
     help='FASTA files, one per color')
-    b.add_argument('--out', required=True)
+    b.add_argument('-o', required=True)
     q = sub.add_parser('query')
     q.add_argument('--index', required=True)
     q.add_argument('--fasta', required=True, help='FASTA file with sequences to query')

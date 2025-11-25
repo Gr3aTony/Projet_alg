@@ -20,6 +20,7 @@ def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k
 
 
 def loop(file_list,k):
+    print(type(file_list))
     dbg = {}
     i = 0 
     with open(file_list,"r") as fl:                  # Ouverture du fichier contenant les chemins d'accès aux fichiers génomiques
@@ -29,4 +30,4 @@ def loop(file_list,k):
             i+=1
     return dbg
 
-print(loop("/Users/2ndlife/Documents/Rennes M2/ALG/Projet_alg/G.txt",17))
+loop("/Users/2ndlife/Documents/Rennes M2/ALG/Projet_alg/G.txt",17)
