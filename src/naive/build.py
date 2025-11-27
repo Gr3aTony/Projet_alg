@@ -1,8 +1,14 @@
 def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k : int || dbg : dict
     """
-    Creer le dictionnaire contenant le graphe de De Brujns coloré
-    fasta_file = pwd du fichier fasta,color indice du fichier dans sa liste, k taille des kmers,dbg dictionaire du graphe
-    renvoi le dictionaire mis à jours
+    Updates De Brujns colored graph of a single fasta file
+    Args:
+        fasta_file : pwd of a fasta file ,
+        color : place of the file in the list
+        k : size of kmers
+        dbg : De brujn graph's 
+    Returns:
+        dict : an updated De Brujns colored graph
+    
     """
     with open(fasta_file,"r") as f:                  # Ouverture du fichier FASTA
         for line in f:                               
@@ -20,6 +26,12 @@ def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k
 
 
 def loop(file_list,k):
+    """
+    Args :
+            file_list: list of pwd of multiple fasta files
+            k : size of kmers
+
+    """
     dbg = {}
     i = 0 
     with open(file_list,"r") as fl:                  # Ouverture du fichier contenant les chemins d'accès aux fichiers génomiques
