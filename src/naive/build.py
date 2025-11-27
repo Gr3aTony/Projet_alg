@@ -14,8 +14,8 @@ def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k
         for line in f:                               
             line = line.strip()                 # Suppression des caractères spéciaux et espaces pour n'avoir (en théorie) que ATCG.
             if not line.startswith('>'):        # On ignore les lignes de description FASTA
-                for i in range(0,len(line)-k):
-                    kmer = line[i:i+k]          # A chaque ittération on avance de 1 dans la séquence en crée un kmer temporaire composé du caractère à l'indice actuel + les k caractères suivant
+                for i in range(0, len(line) - k):
+                    kmer = line[i : i + k]          # A chaque ittération on avance de 1 dans la séquence en crée un kmer temporaire composé du caractère à l'indice actuel + les k caractères suivant
                     # Ajout du k-mer et de sa couleur
                     if kmer not in dbg.keys(): #Si le kmer n'existe pas encore il est crée et la couleur actuelle y est ajoutée
                         dbg[kmer] = [color]
@@ -25,7 +25,7 @@ def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k
 
 
 
-def loop(file_list,k):
+def loop(file_list, k):
     """
     Args :
             file_list: list of pwd of multiple fasta files
@@ -36,8 +36,8 @@ def loop(file_list,k):
     i = 0 
     with open(file_list,"r") as fl:                  # Ouverture du fichier contenant les chemins d'accès aux fichiers génomiques
         for file in fl:
-            file =file.strip()                        # Suppression des caractères spéciaux et espaces pour n'avoir que les chemins des fichiers.
-            dbg = dbg_builder(file,i,k,dbg)
-            i+=1
+            file = file.strip()                        # Suppression des caractères spéciaux et espaces pour n'avoir que les chemins des fichiers.
+            dbg = dbg_builder(file, i, k, dbg)
+            i += 1
     return dbg
 
