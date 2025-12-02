@@ -3,7 +3,7 @@ def dbg_builder(fasta_file : str, color : int, k : int, dbg : dict): # fasta_fil
     Updates De Brujns colored graph of a single fasta file
     Args:
         fasta_file : pwd of a fasta file ,
-        color : place of the file in the list
+        color : place of the file in the original list
         k : size of kmers
         dbg : De brujn graph's 
     Returns:
@@ -30,13 +30,12 @@ def loop(file_list : str, k : int):
     Args :
             file_list: list of pwd of multiple fasta files
             k : size of kmers
-
     """
     dbg = {}
     i = 0 
-    with open(file_list,"r") as fl:                  # Ouverture du fichier contenant les chemins d'accès aux fichiers génomiques
+    with open(file_list,"r") as fl:   # Ouverture du fichier contenant les chemins d'accès aux fichiers génomiques
         for file in fl:
-            file = file.strip()                        # Suppression des caractères spéciaux et espaces pour n'avoir que les chemins des fichiers.
+            file = file.strip()     # Suppression des caractères spéciaux et espaces pour n'avoir que les chemins des fichiers.
             dbg = dbg_builder(file, i, k, dbg)
             i += 1
     return dbg
