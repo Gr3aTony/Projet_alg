@@ -1,4 +1,4 @@
-def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k : int || dbg : dict
+def dbg_builder(fasta_file : str, color : int, k : int, dbg : dict): # fasta_file : str || color : int || k : int || dbg : dict
     """
     Updates De Brujns colored graph of a single fasta file
     Args:
@@ -25,7 +25,7 @@ def dbg_builder(fasta_file,color, k,dbg): # fasta_file : str || color : int || k
 
 
 
-def loop(file_list, k):
+def loop(file_list : str, k : int):
     """
     Args :
             file_list: list of pwd of multiple fasta files
