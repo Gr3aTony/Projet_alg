@@ -1,15 +1,4 @@
 
-#on recoit un dict 
-#on recoit liste de fasta
-#ouvrir file 
-#trouver taille K
-#diviser seq par K
-#unique value de dict a verifier
-# recup seq
-#analyse seq stoquer % dans str
-#return str
-
-
 def query_similarity(cdbg : dict, q : str , k : int):
     """
     Args:
@@ -41,4 +30,8 @@ def query_compute(file_name : str, cdbg : dict):
         nom_seq = line.split("\n")[0]
         seq = line.split("\n")[1]
         similarity = query_similarity(cdbg,seq,k)
-        out.append(nom_seq,similarity)
+        out.append((nom_seq,similarity))
+    print(out)
+
+
+# query_compute("Projet_alg/First_set/query.fa", {"a":"ACEHHE"})
