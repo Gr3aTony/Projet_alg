@@ -1,12 +1,12 @@
 
-def query_similarity(cdbg : dict, q : str , k : int):
+def query_similarity(cdbg : dict, q : str , k : int, nbr_colors : int):
     """
     Args:
 
     Returns:
             a list of the percentage of similarity between our seq and the different genome
     """
-    list_simili = [0] * len(cdbg.values())
+    list_simili = [0] * nbr_colors
     for index in range(0,len(q) - k):
         kmer = q[index : index + k]
         if kmer in cdbg.keys():
@@ -16,8 +16,16 @@ def query_similarity(cdbg : dict, q : str , k : int):
         list_simili[index] = list_simili[index] / (len(q) - k)
     return list_simili
 
+def find_colors(cdbg):
+    colors = set()
+    for c in cdbg.values():
+        for val in c:
+            colors.add(val)
+    return len(colors)
+
 def query_compute(file_name : str, cdbg : dict):
     k = len(next(iter(cdbg)))
+    nbr_colors = find_colors(cdbg)
     total_file = ""
     out = []
     with open(file_name,"r") as f:       #compute the diff seq into one str           
@@ -29,7 +37,7 @@ def query_compute(file_name : str, cdbg : dict):
     for line in total_file.split(">"): #extract name and seq from the fasta str
         nom_seq = line.split("\n")[0]
         seq = line.split("\n")[1]
-        similarity = query_similarity(cdbg,seq,k)
+        similarity = query_similarity(cdbg, seq, k, nbr_colors)
         out.append((nom_seq,similarity))
     print(out)
 
