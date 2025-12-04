@@ -17,7 +17,10 @@ def query_index(args):
     q = args.q #query_file_name.fa
     cdbg = pickle.load(open( args.cdbg,"rb"))
     out_name = args.o# name of future output file
-    query.query_compute(q,cdbg)
+    res = query.query_compute(q,cdbg)
+    with open(f"{out_name}","w") as f:
+        f.write(f"{res}")
+
 
 def main():
     parser = argparse.ArgumentParser()

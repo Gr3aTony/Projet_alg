@@ -1,5 +1,5 @@
 
-def query_similarity(cdbg : dict, q : str , k : int, nbr_colors : int):
+def query_similarity(cdbg : dict, seq : str , k : int, nbr_colors : int):
     """
     Args:
 
@@ -7,13 +7,14 @@ def query_similarity(cdbg : dict, q : str , k : int, nbr_colors : int):
             a list of the percentage of similarity between our seq and the different genome
     """
     list_simili = [0] * nbr_colors
-    for index in range(0,len(q) - k):
-        kmer = q[index : index + k]
+    index = 0
+    for index in range(0,len(seq) - k):
+        kmer = seq[index : index + k]
         if kmer in cdbg.keys():
             for color in cdbg[kmer]:
                 list_simili[color]+=1
     for index in range(len(list_simili)):
-        list_simili[index] = list_simili[index] / (len(q) - k)
+        list_simili[index] = list_simili[index] / (len(seq) - k)
     return list_simili
 
 def find_colors(cdbg):
@@ -39,7 +40,7 @@ def query_compute(file_name : str, cdbg : dict):
         seq = line.split("\n")[1]
         similarity = query_similarity(cdbg, seq, k, nbr_colors)
         out.append((nom_seq,similarity))
-    print(out)
+    return(out)
 
 
 # query_compute("Projet_alg/First_set/query.fa", {"a":"ACEHHE"})
