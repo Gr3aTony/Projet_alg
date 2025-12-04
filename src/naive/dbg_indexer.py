@@ -18,7 +18,7 @@ def query_index(args):
     cdbg = pickle.load(open( args.cdbg,"rb"))
     out_name = args.o# name of future output file
     res = query.query_compute(q,cdbg)
-    with open(f"{out_name}","w") as f:
+    with open(f"{out_name}.txt","w") as f:
         f.write(f"{res}")
 
 

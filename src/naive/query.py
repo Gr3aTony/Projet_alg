@@ -1,4 +1,4 @@
-
+from Bio import SeqIO
 def query_similarity(cdbg : dict, seq : str , k : int, nbr_colors : int):
     """
     Args:
@@ -10,11 +10,11 @@ def query_similarity(cdbg : dict, seq : str , k : int, nbr_colors : int):
     index = 0
     for index in range(0,len(seq) - k):
         kmer = seq[index : index + k]
-        if kmer in cdbg.keys():
+        if kmer in cdbg:
             for color in cdbg[kmer]:
                 list_simili[color]+=1
-    for index in range(len(list_simili)):
-        list_simili[index] = list_simili[index] / (len(seq) - k)
+    for i_list in range(nbr_colors):
+        list_simili[i_list] = round(list_simili[i_list] / (len(seq) - k),4)
     return list_simili
 
 def find_colors(cdbg):
@@ -27,19 +27,11 @@ def find_colors(cdbg):
 def query_compute(file_name : str, cdbg : dict):
     k = len(next(iter(cdbg)))
     nbr_colors = find_colors(cdbg)
-    total_file = ""
-    out = []
-    with open(file_name,"r") as f:       #compute the diff seq into one str           
-        for line in f:  
-            line = line.strip()
-            if ">" in line:
-                line = "\n"+line+"\n"                          
-            total_file += line
-    for line in total_file.split(">"): #extract name and seq from the fasta str
-        nom_seq = line.split("\n")[0]
-        seq = line.split("\n")[1]
+    out = ""
+    for record in SeqIO.parse(file_name,"fasta"):
+        seq = str(record.seq)
         similarity = query_similarity(cdbg, seq, k, nbr_colors)
-        out.append((nom_seq,similarity))
+        out += f"{record.id} {similarity}\n"
     return(out)
 
 
