@@ -18,7 +18,14 @@ setiset = set()
 for clé in dictio.keys():
     if a in clé:
         setiset.update(dictio[clé])
-print(set(dictio.keys()))
+dictio.update({"aezfz":{1,3,4}})
+print(dictio)
+lis = [1,2,3]
+sete = {1,2,3,6}
+sete.difference_update(lis)
+print(sete)
+s = {11, 73, -22, "Geeks", '@'}
+iterator = iter(s)
 
                    
                           

@@ -38,27 +38,78 @@ def left_neighbors(kmer, dbg):
             res.append(voisin)
     return res
 
+# def right_unitig(kmer,list_kmer):
+#     unitig = kmer
+#     current_kmer = kmer
+#     list_neighbors = [kmer]
+#     while True:
+#         left_conect = left_neighbors(kmer,list_kmer)
+#         voisins = right_neighbors(current_kmer,list_kmer)
+#         if len(left_conect) == 1:
+#             return 0
+#         if len(voisins) == 0:
+#             return unitig,list_neighbors
+#         if len(voisins) >1:
+#             return unitig,list_neighbors
+#         if voisins[0] == kmer:
+#             return unitig,list_neighbors
+#         if len(left_neighbors(voisins[0],list_kmer))>1:
+#             return unitig,list_neighbors
+#         unitig += voisins[0][-1]
+#         current_kmer = voisins[0]
+#         list_neighbors.append(voisins[0])
 
-def right_unitig(kmer,dbg):
-    unitig = kmer
-    current_kmer = kmer
+# def left_unitig(kmer,list_kmer):
+#     unitig = kmer
+#     current_kmer = kmer
+#     list_neighbors = [kmer]
+#     while True:
+#         right_connect = right_neighbors(kmer,list_kmer)
+#         voisins = left_neighbors(current_kmer,list_kmer)
+#         if len(right_connect)>1:
+#             return 0
+#         if len(voisins) == 0:
+#             return unitig,list_neighbors
+#         if len(voisins) >1:
+#             return unitig,list_neighbors
+#         if len(right_neighbors(voisins[0],list_kmer))>1:
+#             return unitig,list_neighbors
+
+#         unitig = voisins[0][0]+unitig
+#         current_kmer = voisins[0]
+#         list_neighbors.append(voisins[0])
+
+def nbr_voisin_gauche(kmer, kmer_set):
+    return len(left_neighbors(kmer, kmer_set))
+def nbr_voisin_droit(kmer, kmer_set):
+    return len(right_neighbors(kmer, kmer_set))
+
+def find_start(kmer, kmer_set):
     while True:
-        voisins = right_neighbors(current_kmer,dbg)
-        if len(voisins) == 0:
-            print("Stop because dead-end")
-            return unitig
-        if len(voisins) >1:
-            print("Stop because multiple out edges")
-            return unitig
-        if voisins[0] == kmer:
-            print("Stop because loop")
-            return unitig
-        if len(left_neighbors(voisins[0],dbg))>1:
-            print("Stop because multiple in edges")
-            return unitig
-        # else can extend
-        unitig += voisins[0][-1]
-        current_kmer = voisins[0]
+        if not (nbr_voisin_gauche(kmer, kmer_set) == 1 ):
+            return kmer
+        left = left_neighbors(kmer, kmer_set)[0]
+        if nbr_voisin_droit(left, kmer_set) != 1:
+            return kmer
+        kmer = left
+
+def build_unitig(start, kmer_set):
+    unitig = start
+    used = {start}
+    current = start
+
+    while nbr_voisin_droit(current, kmer_set) == 1:
+        nxt = right_neighbors(current, kmer_set)[0]
+        if nxt in used:          # cycle
+            break
+        used.add(nxt)
+        unitig += nxt[-1]
+        current = nxt
+        # stop after adding an endpoint (endpoint = not internal)
+        if not (nbr_voisin_gauche(current, kmer_set) == 1 and nbr_voisin_droit(current, kmer_set) == 1):
+            break
+
+    return unitig, used
 
 
 def loop(file_list : str, k : int):
@@ -75,5 +126,22 @@ def loop(file_list : str, k : int):
             dbg = dbg_builder(file, i, k, dbg)
             i += 1
     bag_of_kmer = set(dbg.keys())
+    list_kmer = set(dbg.keys())
+    final_dict = {}
+    while list_kmer:
+        current = next(iter(list_kmer))
+        colors_unit = dbg[current]
 
-    return dbg,bag_of_kmer
+        start_uni = find_start(current,list_kmer)
+        indeg = len(left_neighbors(start_uni, list_kmer))
+        outdeg = len(right_neighbors(start_uni, list_kmer))
+        assert (indeg==1 and outdeg==1), (start_uni, indeg, outdeg)
+        unitig,used = build_unitig(start_uni,list_kmer)
+        final_dict[unitig] =colors_unit
+        list_kmer.difference_update(used)
+            
+    return final_dict,bag_of_kmer
+
+
+test = loop("G.txt",31)
+print(len(test[0]))
