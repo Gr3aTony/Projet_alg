@@ -53,6 +53,7 @@ def right_unitig(kmer,list_kmer):
             used_kmer.add(current_kmer)
             return unitig,used_kmer
         if len(left_neighbors(voisins[0],list_kmer))>1:
+            used_kmer.add(current_kmer)
             return unitig,used_kmer
         unitig += voisins[0][-1]
         used_kmer.add(current_kmer)
@@ -69,11 +70,13 @@ def left_unitig(kmer,list_kmer):
             used_kmer.add(current_kmer)
             return unitig,used_kmer
         if len(voisins) >1:
+            used_kmer.add(current_kmer)
             return unitig,used_kmer
         if voisins[0] == kmer:
             used_kmer.add(current_kmer)
             return unitig,used_kmer
         if len(right_neighbors(voisins[0],list_kmer))>1:
+            used_kmer.add(current_kmer)
             return unitig,used_kmer
         unitig = voisins[0][0]+unitig
         used_kmer.add(current_kmer)
@@ -98,13 +101,16 @@ def loop(file_list : str, k : int):
     list_kmer = set(dbg.keys())
     final_dict = {}
     seen = set()
-    while list_kmer!=seen:
-        candidat = list_kmer.difference(seen)
+    while list_kmer!=seen and len(list_kmer)!=0:
+        # print(len(list_kmer))
+        candidat = list_kmer.difference(seen)#tt kmer pas encore analysé
         current = next(iter(candidat))
-        colors_unit = dbg[current]
+        colors_unit = dbg[current]#recup couleur de l'unitig que l'on va creer
         left_uni,left_used = left_unitig(current,list_kmer)
         right_uni,right_used = right_unitig(current,list_kmer)
         if left_uni == right_uni:#cas ou on a un kmer unique avec 2 voisins a gauche et a droite
+            used = left_used.union(right_used)
+            list_kmer.difference_update(used)
             final_dict[left_uni] = colors_unit
         else:
             unitig = left_uni[:-k] + right_uni
@@ -113,7 +119,7 @@ def loop(file_list : str, k : int):
             seen.add(current)
         elif len(left_used) == 0 or len(right_used) == 0 :# current a au moins un voisinage multiple direct
             used = left_used.union(right_used)
-            used.discard(current)
+            # used.discard(current)
             list_kmer.difference_update(used)
         else:
             used = left_used.union(right_used)
@@ -122,7 +128,12 @@ def loop(file_list : str, k : int):
     return final_dict,bag_of_kmer
 
 
-test = loop("G.txt",10)
-
-
-print(len(test[0]),len(test[1]))
+# dico,kmer = loop("G.txt",31)
+# # i=0
+# # for x in kmer:
+# #     for j in dico.keys():
+# #         if x in j:
+# #             # print(x,j.find(x),len(j)-len(x))
+# #             i+=1
+# #             break
+# print(len(dico.keys()))

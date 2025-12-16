@@ -15,9 +15,11 @@ def build_index(args):
 
 def query_index(args):
     q = args.q #query_file_name.fa
-    cdbg = pickle.load(open( args.cdbg,"rb"))
+    cdbg,kmer_bag = pickle.load(open( args.cdbg,"rb"))
+
+    k = len(next(iter((kmer_bag))))
     out_name = args.o# name of future output file
-    res = query.query_compute(q,cdbg)
+    res = query.query_compute(q,cdbg,k)
     with open(f"{out_name}.txt","w") as f:
         f.write(f"{res}")
 
@@ -42,5 +44,5 @@ def main():
         parser.print_help()
 if __name__ == '__main__':
     #./dbg_indexer.py build -k 31 -i ../../G.txt -o trial1
-    #./dbg_indexer.py query -cdbg trial1.dumped -q ../../First_set/query.fa -o ../../First_set/res_query_naive.txt
+    #./src/advanced/dbg_indexer.py query -cdbg trial1.dumped -q ../../First_set/query.fa -o ../../First_set/res_query_naive.txt
     main()
