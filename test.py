@@ -20,12 +20,16 @@ for clé in dictio.keys():
         setiset.update(dictio[clé])
 dictio.update({"aezfz":{1,3,4}})
 print(dictio)
-lis = [1,2,3]
+lis = ["zlfe,ze",2,3]
 sete = {1,2,3,6}
 sete.difference_update(lis)
 print(sete)
-s = {11, 73, -22, "Geeks", '@'}
-iterator = iter(s)
+sete.add(lis[0])
 
-                   
-                          
+az ="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+print(az[:-(len(az)-1)])
+a = set()                 
+# sete.discard(1)
+a = a.union(sete)
+a.discard(1)
+print(a)
