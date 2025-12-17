@@ -4,20 +4,38 @@ import build
 import query
 import argparse
 import pickle
+import time
 
 
 def build_index(args):
     k = args.k
     file_list = args.i[0]
     out_name = args.o
+
+    debut_build = time.perf_counter()
     colored_graph = build.loop(file_list,k)
+    fin_build = time.perf_counter()
+    print(f"OUT TIME_BUILD: {fin_build - debut_build:.4f} second.")
+
+    t0 = time.perf_counter()
     pickle.dump(colored_graph,open(f"{out_name}.dumped","wb"))
+    t1 = time.perf_counter()
+    print(f"OUT TIME_SERIALISATION: {t1 - t0:.4f} second.")
 
 def query_index(args):
     q = args.q #query_file_name.fa
+
+    t0 = time.perf_counter()
     cdbg = pickle.load(open( args.cdbg,"rb"))
+    t1 = time.perf_counter()
+    print(f"OUT TIME_DESERIALISATION {t1 - t0:.6f} second.")
     out_name = args.o# name of future output file
+
+    debut_query = time.perf_counter()
     res = query.query_compute(q,cdbg)
+    fin_query = time.perf_counter()
+    print(f"OUT TIME_QUERY: {fin_query - debut_query:.4f} second.")
+
     with open(f"{out_name}.txt","w") as f:
         f.write(f"{res}")
 

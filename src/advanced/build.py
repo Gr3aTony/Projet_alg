@@ -1,4 +1,6 @@
 from Bio import SeqIO
+
+
 def dbg_builder(fasta_file : str, color : int, k : int, dbg : dict): # fasta_file : str || color : int || k : int || dbg : dict
     """
     Updates De Brujns colored graph of a single fasta file
@@ -117,7 +119,7 @@ def loop(file_list : str, k : int):
 
 
 
-# dico,kmer = loop("G.txt",31)
+# dico,kmer = loop("G.txt",150)
 # i=0
 # for x in dico.keys():
 #     for j in dico.keys():

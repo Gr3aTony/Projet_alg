@@ -1,4 +1,5 @@
 from Bio import SeqIO
+
 def query_similarity(cdbg : dict, seq : str , k : int, nbr_colors : int):
     """
     Args:
