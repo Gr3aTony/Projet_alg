@@ -41,7 +41,7 @@ def query_similarity(cdbg: dict, seq: str, k: int, nbr_colors: int):
     list_simili = [0] * nbr_colors
 
     # Slide a window of size k along the sequence
-    for index in range(0, len(seq) - k):
+    for index in range(0, len(seq) - k + 1):
         kmer = seq[index: index + k]
 
         # Check whether the k-mer exists in the colored De Bruijn graph
