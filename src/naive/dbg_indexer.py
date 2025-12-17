@@ -151,6 +151,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # ./dbg_indexer.py build -k 31 -i ../../G.txt -o trial1
-    # ./dbg_indexer.py query -cdbg trial1.dumped -q ../../First_set/query.fa -o ../../First_set/res_query_naive.txt
     main()
