@@ -149,7 +149,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # Example usage:
-    # ./dbg_indexer.py build -k 31 -i ../../G.txt -o trial1
-    # ./src/advanced/dbg_indexer.py query -cdbg trial1.dumped -q ../../First_set/query.fa -o ../../First_set/res_query_advanced.txt
     main()
