@@ -35,7 +35,7 @@ def query_similarity(cdbg: dict, seq: str, k: int, nbr_colors: int):
     """
     list_simili = [0] * nbr_colors
 
-    for index in range(0, len(seq) - k):
+    for index in range(0, len(seq) - k + 1):
         kmer = seq[index: index + k]
 
         for unitig in cdbg.keys():
@@ -47,7 +47,7 @@ def query_similarity(cdbg: dict, seq: str, k: int, nbr_colors: int):
     # Normalize similarity scores
     for i_list in range(nbr_colors):
         list_simili[i_list] = round(
-            list_simili[i_list] / (len(seq) - k),
+            list_simili[i_list] / (len(seq) - k + 1),
             4
         )
 
