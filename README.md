@@ -72,17 +72,13 @@ Le graphe est ensuite sérialisé à l’aide de la librairie pickle.
 
 ### Construction de l’index
 
-Version naïve :
-
-Version avancée :
-
+Dans le terminal lancez :
+./dbg_indexer.py build -k {taille des kmers souhaité} -i {fichier contenant la liste des génomes} -o {nom choisi pour le cDBG en cour de création}
 
 ### Requête
 
-Version naïve :
-
-Version avancée :
-
+Dans le terminal lancez :
+./dbg_indexer.py query -cdbg {l'objet contenant le cdbg précedement créé} -q {fichier contenant les séquences fasta } -o {nom du fichier txt de resultat}
 
 ## Entrées et sorties
 
