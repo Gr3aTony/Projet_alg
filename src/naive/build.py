@@ -43,7 +43,7 @@ def dbg_builder(fasta_file: str, color: int, k: int, dbg: dict):
         seq = str(record.seq)
 
         # Sliding window extraction of k-mers along the sequence
-        for i in range(0, len(seq) - k):
+        for i in range(0, len(seq) - k + 1):
             kmer = seq[i: i + k]
 
             # Add the k-mer if it does not yet exist in the graph
