@@ -16,7 +16,7 @@ def query_similarity(cdbg : dict, seq : str , k : int, nbr_colors : int):
                     list_simili[color]+=1
                 break
     for i_list in range(nbr_colors):
-        list_simili[i_list] = round(list_simili[i_list] / (len(seq) - k),4)
+        list_simili[i_list] = round(list_simili[i_list] / (len(seq) - k), 4)
     return list_simili
 
 def find_colors(cdbg):
