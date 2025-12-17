@@ -40,47 +40,45 @@ def left_neighbors(kmer, dbg):
 
 def right_unitig(kmer,list_kmer):
     unitig = kmer
-    current_kmer = kmer
-    used_kmer = set()
+    used = {kmer}
+    current = kmer
+
     while True:
-        voisins = right_neighbors(current_kmer,list_kmer)
-        if len(voisins) == 0:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        if len(voisins) >1:
-            return unitig,used_kmer
-        if voisins[0] == kmer:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        if len(left_neighbors(voisins[0],list_kmer))>1:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        unitig += voisins[0][-1]
-        used_kmer.add(current_kmer)
-        current_kmer = voisins[0]
-        
+        voisins = right_neighbors(current, list_kmer)
+        if len(voisins) != 1:              
+            return unitig, used
+
+        nxt = voisins[0]
+        unitig += nxt[-1]               
+        used.add(nxt)
+
+        if nxt == kmer or nxt == current:
+            return unitig, used
+        if len(left_neighbors(nxt, list_kmer)) != 1 or len(right_neighbors(nxt, list_kmer)) != 1:
+            return unitig, used
+
+        current = nxt
 
 def left_unitig(kmer,list_kmer):
     unitig = kmer
-    current_kmer = kmer
-    used_kmer = set()
+    used = {kmer}
+    current = kmer
+
     while True:
-        voisins = left_neighbors(current_kmer,list_kmer)
-        if len(voisins) == 0:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        if len(voisins) >1:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        if voisins[0] == kmer:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        if len(right_neighbors(voisins[0],list_kmer))>1:
-            used_kmer.add(current_kmer)
-            return unitig,used_kmer
-        unitig = voisins[0][0]+unitig
-        used_kmer.add(current_kmer)
-        current_kmer = voisins[0]
+        voisin = left_neighbors(current, list_kmer)
+        if len(voisin) != 1:              
+            return unitig, used
+
+        nxt = voisin[0]
+        unitig = nxt[0] + unitig        
+        used.add(nxt)
+
+        if nxt == kmer or nxt == current:#en cas de boucle ou de genome circulaire
+            return unitig, used
+        if len(left_neighbors(nxt, list_kmer)) != 1 or len(right_neighbors(nxt, list_kmer)) != 1:
+            return unitig, used
+
+        current = nxt
         
 
 
@@ -100,40 +98,30 @@ def loop(file_list : str, k : int):
     bag_of_kmer = set(dbg.keys())
     list_kmer = set(dbg.keys())
     final_dict = {}
-    seen = set()
-    while list_kmer!=seen and len(list_kmer)!=0:
-        # print(len(list_kmer))
-        candidat = list_kmer.difference(seen)#tt kmer pas encore analysé
-        current = next(iter(candidat))
-        colors_unit = dbg[current]#recup couleur de l'unitig que l'on va creer
-        left_uni,left_used = left_unitig(current,list_kmer)
-        right_uni,right_used = right_unitig(current,list_kmer)
-        if left_uni == right_uni:#cas ou on a un kmer unique avec 2 voisins a gauche et a droite
-            used = left_used.union(right_used)
-            list_kmer.difference_update(used)
-            final_dict[left_uni] = colors_unit
-        else:
-            unitig = left_uni[:-k] + right_uni
-            final_dict[unitig] =colors_unit
-        if len(left_used) + len(right_used) <= 1:#current à un voisinage multiple a gauche ou a droite
-            seen.add(current)
-        elif len(left_used) == 0 or len(right_used) == 0 :# current a au moins un voisinage multiple direct
-            used = left_used.union(right_used)
-            # used.discard(current)
-            list_kmer.difference_update(used)
-        else:
-            used = left_used.union(right_used)
-            list_kmer.difference_update(used)
+
+    while list_kmer:
+        current = next(iter(list_kmer))
+        colors_unitig = dbg[current]#recup couleur de l'unitig que l'on va creer
+
+        left_uni, left_used = left_unitig(current, bag_of_kmer)
+        right_uni, right_used = right_unitig(current, bag_of_kmer)
+
+        unitig = left_uni[:-k] + right_uni
+        used = left_used.union(right_used)
+        final_dict[unitig] = sorted(colors_unitig)
+
+        list_kmer.difference_update(used)
+
+    return final_dict, bag_of_kmer
             
-    return final_dict,bag_of_kmer
+
 
 
 # dico,kmer = loop("G.txt",31)
-# # i=0
-# # for x in kmer:
-# #     for j in dico.keys():
-# #         if x in j:
-# #             # print(x,j.find(x),len(j)-len(x))
-# #             i+=1
-# #             break
+# i=0
+# for x in dico.keys():
+#     for j in dico.keys():
+#         if x in j and x!=j:
+#             print(x,j.find(x),len(j)-len(x))
+#             i+=1
 # print(len(dico.keys()))
